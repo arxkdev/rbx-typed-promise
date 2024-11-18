@@ -31,26 +31,29 @@ export type Promise = {
 	timeout: (self: Promise, seconds: number, rejectionValue: any?) -> Promise,
 }
 
-export type TypedPromise<T...> = {
-	andThen: (self: Promise, successHandler: (T...) -> ...any, failureHandler: ((...any) -> ...any)?) -> Promise,
-	andThenCall: <TArgs...>(self: Promise, callback: (TArgs...) -> ...any, TArgs...) -> Promise,
-	andThenReturn: (self: Promise, ...any) -> Promise,
+export type TypedPromise<T> = {
+	andThen: (
+        self: TypedPromise<T...>,
+        successHandler: (result: T) -> ...any,
+        failureHandler: ((...any) -> ...any)?
+    ) -> TypedPromise<any>,
+	andThenReturn: (self: TypedPromise<T...>, ...any) -> TypedPromise<any>,
 
-	await: (self: Promise) -> (boolean, T...),
-	awaitStatus: (self: Promise) -> (Status, T...),
+	await: (self: TypedPromise<T...>) -> (boolean, ...T),
+	awaitStatus: (self: TypedPromise<T...>) -> (Status, ...T),
 
-	cancel: (self: Promise) -> (),
-	catch: (self: Promise, failureHandler: (...any) -> ...any) -> Promise,
-	expect: (self: Promise) -> T...,
+	cancel: (self: TypedPromise<T...>) -> (),
+	catch: (self: TypedPromise<T...>, failureHandler: (...any) -> ...any) -> TypedPromise<any>,
+	expect: (self: TypedPromise<T...>) -> ...any,
+	finally: (self: TypedPromise<T...>, finallyHandler: (status: Status) -> ...any) -> TypedPromise<any>,
 
-	finally: (self: Promise, finallyHandler: (status: Status) -> ...any) -> Promise,
-	finallyCall: <TArgs...>(self: Promise, callback: (TArgs...) -> ...any, TArgs...) -> Promise,
-	finallyReturn: (self: Promise, ...any) -> Promise,
+	finallyReturn: (self: TypedPromise<T...>, ...any) -> TypedPromise<T...>,
+	finallyCall: <TArgs...>(self: TypedPromise<T...>, callback: (TArgs...) -> ...any, TArgs...) -> TypedPromise<any>,
 
-	getStatus: (self: Promise) -> Status,
-	now: (self: Promise, rejectionValue: any?) -> Promise,
-	tap: (self: Promise, tapHandler: (T...) -> ...any) -> Promise,
-	timeout: (self: Promise, seconds: number, rejectionValue: any?) -> Promise,
+	getStatus: (self: TypedPromise<T...>) -> Status,
+	now: (self: TypedPromise<T...>, rejectionValue: any?) -> TypedPromise<any>,
+	tap: (self: TypedPromise<T...>, tapHandler: (...any) -> ...any) -> TypedPromise<any>,
+	timeout: (self: TypedPromise<T...>, seconds: number, rejectionValue: any?) -> TypedPromise<any>,
 }
 
 type Signal<T...> = {

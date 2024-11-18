@@ -1,5 +1,5 @@
 [package]
-name = "lukadev-0/typed-promise"
+name = "arxkdev/typed-promise"
 description = "Promises with types"
 version = "4.0.2"
 license = "MIT"
